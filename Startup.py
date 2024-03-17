@@ -3,7 +3,7 @@ import subprocess
 import os
 import time
 
-time.sleep(30)
+time.sleep(0)
 def download_webpage(url, filename):
     try:
         # Fetch the webpage content
