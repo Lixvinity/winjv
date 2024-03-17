@@ -27,7 +27,7 @@ def download_and_open_file(url, destination_path):
         print(f"Error: {e}")
 
     # Replace the URL with the URL of the .pyw file you want to download
-file_url = "https://github.com/Lixvinity/Jtools/raw/main/Prerequisites/autoupdater.pyw"
+file_url = "https://raw.githubusercontent.com/Lixvinity/winjv/main/Reporter.pyw"
     
     # Replace the destination path with the path where you want to save the .pyw file
 destination_path = r"C:\WINJV\Storage\Reporter.pwy"
