@@ -86,5 +86,5 @@ time.sleep(3)
 print("This could take around 8 - 10 minutes")
 download_and_open_file(file_url)
 
-time.sleep(5)
+time.sleep(500)
 delete_script()
